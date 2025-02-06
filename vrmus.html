@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Learning Complex</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #f5deb3;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+        }
+        nav {
+            background-color: #2b2b2b;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav a {
+            color: #f5c518;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        nav a:hover {
+            background: #444;
+        }
+        .container {
+            padding: 50px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .hidden {
+            display: none;
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        h1 {
+            border-bottom: 2px solid #f5c518;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .content {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .content img {
+            width: 45%;
+            margin-right: 5%;
+            margin-bottom: 20px;
+        }
+        .content p {
+            font-size: 18px;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .links {
+            margin-top: 30px;
+            text-align: left;
+        }
+        .links a {
+            color: #f5c518;
+            font-size: 16px;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" onclick="showPage('home')">Главная</a>
+        <a href="#" onclick="showPage('ar')">AR-приложение</a>
+        <a href="#" onclick="showPage('game')">Игровой модуль</a>
+        <a href="#" onclick="showPage('vr')">VR-тренажёр</a>
+        <a href="#" onclick="showPage('oil-history')">История нефти</a>
+        <a href="#" onclick="showPage('about')">О проекте</a>
+        <a href="#" onclick="showPage('contact')">Контакты</a>
+    </nav>
+    
+    <div id="home" class="container">
+        <h1>Добро пожаловать в виртуальный учебный комплекс!</h1>
+        <p>Наш проект направлен на создание виртуального тренажёра в музее нефти имени Романа Ивановича Кузоваткина, который поможет учащимся изучить нефтегазовую индустрию и определиться с будущей профессией.</p>
+        <img src="muzkuz5.jpg" alt="Главная страница">
+        <div class="content">
+            <h2>История музея</h2>
+            <p>Музей нефти имени Романа Ивановича Кузоваткина был создан на третьем этаже школы №1 пгт. Пойковский. В музее представлены экспозиции, посвященные истории нефти, истории НГДУ «Правдинскнефть» и быту нефтяников 1970-90-х годов.</p>
+        </div>
+        <img src="muzkuz1.jpg" alt="Фото музея">
+    </div>
+
+    <div id="ar" class="container hidden">
+        <h1>AR-приложение</h1>
+        <p>Использование дополненной реальности для изучения экспонатов музея. Посетители могут взаимодействовать с историческими и профориентационными видеороликами в новом формате.</p>
+        <img src="ar.jpg" alt="AR приложение">
+        <img src="ar1.jpg" alt="AR приложение">
+        <div class="links">
+            <a href="https://practicum.yandex.ru/blog/tehnologiya-dopolnennoy-realnosti/">Узнать больше о технологии AR</a>
+            <a href="https://youarenotwhite4343.itch.io/ar-museum">Скачать AR-приложение</a>
+        </div>
+    </div>
+
+    <div id="game" class="container hidden">
+        <h1>Игровой модуль</h1>
+        <p>Пройдите квесты и викторины, зарабатывайте очки, углубляйте знания об истории нефтяной промышленности.</p>
+        <img src="gamemodule.jpg" alt="Наш Telegram-Бот">
+        <img src="gamemodule1.jpg" alt="Наш Telegram-Бот">
+        <img src="gamemodule2.jpg" alt="Наш Telegram-Бот">
+        <div class="links">
+            <a href="https://t.me/NeftcoinGame_bot">Начать игру</a>
+        </div>
+    </div>
+
+    <div id="vr" class="container hidden">
+        <h1>VR-тренажёр</h1>
+        <p>Позволяет погрузиться в виртуальную реальность, исследовать нефтяные месторождения и изучать работу нефтяников на буровых установках.</p>
+        <img src="vrc.png" alt="VR тренажёр">
+        <img src="vrc1.png" alt="VR тренажёр">
+        <iframe src="https://rutube.ru/video/private/fc619d7bf199a769043686087f429dfe/?p=0N_wp7sdkFb_7ly9BpqIlQ" title="VR-тренажёр Видео"></iframe>
+        <div class="links">
+        </div>
+    </div>
+
+    <div id="oil-history" class="container hidden">
+        <h1>История нефти</h1>
+        <p>Нефть известна человечеству с древних времён. Первые упоминания о её использовании относятся к 6500 году до нашей эры. Нефть формируется из остатков древних организмов, подвергшихся давлению и температуре в течение миллионов лет.</p>
+        <p>Правдинское месторождение. 1 декабря 1964 года скважина № Р-51 дала фонтан нефти, что изменило судьбу региона и принесло процветание. Салымское месторождение, где в 1965 году первая скважина также дала нефть, несмотря на трудности первопроходцев. Наконец, Нефтеюганский район, где в 1961 году скважина Р-62 открыла новое время, а в 1977 году был создан 'Юганскнефтегаз', который под руководством Романа Ивановича Кузоваткина разработал 28 месторождений.</p>
+        <img src="istr.jpg" alt="История нефти">
+        <img src="istr1.jpg" alt="История нефти">
+        <div class="links">
+            <a href="https://www.neftegaz-expo.ru/ru/ui/17168/">Узнать больше о месторождениях</a>
+            <a href="https://nonews.co/directory/lists/geography/oil-fields-map">Карта нефтяных месторождений мира</a>
+        </div>
+    </div>
+
+    <div id="about" class="container hidden">
+        <h1>О проекте</h1>
+        <p>Проект разработан учениками Пестриковым Кириллом, Морозовым Антоном под руководством наставника Рахманова Александра Валерьевича.</p>
+        <p>Используется отечественная платформа VARWIN для создания интерактивных сценариев и виртуальных сред обучения.</p>
+        <img src="about.jpg" alt="О проекте">
+        <div class="links">
+            <a href="https://vk.com/vrcomplex">Связь с разработчиками</a>
+        </div>
+    </div>
+
+    <div id="contact" class="container hidden">
+        <h1>Контакты</h1>
+        <p>Свяжитесь с нами по email: virtuallearningcomplex@gmail.com</p>
+        <p>Заполните наш опрос, чтобы помочь нам улучшить учебный комплекс!</p>
+        <div class="links">
+            <a href="https://forms.yandex.ru/u/662511a43e9d086b4aa04017/">Заполнить опрос</a>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            let pages = document.querySelectorAll('.container');
+            pages.forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
