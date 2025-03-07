@@ -103,13 +103,13 @@
 </head>
 <body>
     <nav>
-        <a href="#" onclick="showPage('home')">Главная</a>
-        <a href="#" onclick="showPage('ar')">AR-приложение</a>
-        <a href="#" onclick="showPage('game')">Игровой модуль</a>
-        <a href="#" onclick="showPage('vr')">VR-тренажёр</a>
-        <a href="#" onclick="showPage('oil-history')">История нефти</a>
-        <a href="#" onclick="showPage('about')">О проекте</a>
-        <a href="#" onclick="showPage('contact')">Контакты</a>
+        <a href="#" onclick="showPage('home'); return false;">Главная</a>
+        <a href="#" onclick="showPage('ar'); return false;">AR-приложение</a>
+        <a href="#" onclick="showPage('game'); return false;">Игровой модуль</a>
+        <a href="#" onclick="showPage('vr'); return false;">VR-тренажёр</a>
+        <a href="#" onclick="showPage('oil-history'); return false;">История нефти</a>
+        <a href="#" onclick="showPage('about'); return false;">О проекте</a>
+        <a href="#" onclick="showPage('contact'); return false;">Контакты</a>
     </nav>
     
     <div id="home" class="container">
@@ -122,7 +122,8 @@
         </div>
         <img src="muzkuz1.jpg" alt="Фото музея">
         <div class="links">
-            <a href="https://yandex.ru/maps/?l=stv%2Csta&ll=71.900881%2C60.996021&panorama%5Bdirection%5D=266.124485%2C-5.930811&panorama%5Bfull%5D=true&panorama%5Bpoint%5D=71.900597%2C60.995981&panorama%5Bspan%5D=114.501405%2C60.000000&z=20">Панорама музея им. Р.И. Кузоваткина </a>
+            <a href="https://yandex.ru/maps/?l=stv%2Csta&ll=71.900881%2C60.996021&panorama%5Bdirection%5D=266.124485%2C-5.930811&panorama%5Bfull%5D=true&panorama%5Bpoint%5D=71.900597%2C60.995981&panorama%5Bspan%5D=114.501405%2C60.000000&z=20">Панорама музея им. Р.И. Кузоваткина</a>
+        </div>
     </div>
 
     <div id="ar" class="container hidden">
@@ -190,9 +191,15 @@
 
     <script>
         function showPage(pageId) {
-            let pages = document.querySelectorAll('.container');
+            // Скрыть все контейнеры
+            const pages = document.querySelectorAll('.container');
             pages.forEach(page => page.classList.add('hidden'));
-            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Показать выбранную страницу
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
         }
     </script>
 </body>
