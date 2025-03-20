@@ -3,204 +3,647 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Learning Complex</title>
+    <title>Виртуальный учебный комплекс</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
+        :root {
+            --yellow: #FFD700;
+            --orange: #FFA500;
+            --red: #8B0000;
+            --black: #000000;
+            --white: #FFFFFF;
+            --gradient: linear-gradient(135deg, var(--yellow) 0%, var(--orange) 50%, var(--red) 100%);
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
         body {
-            background-color: #1e1e1e;
-            color: #f5deb3;
-            font-family: 'Arial', sans-serif;
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
+            line-height: 1.8;
             display: flex;
         }
+
         nav {
-            background-color: #2b2b2b;
-            width: 250px;
+            background: var(--black);
+            width: 280px;
             height: 100vh;
             position: fixed;
-            padding-top: 20px;
+            padding: 40px 20px;
+            border-right: 2px solid var(--orange);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 10px;
         }
+
         nav a {
-            color: #f5c518;
+            color: var(--white);
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background 0.3s;
-            width: 80%;
+            font-size: 1.1rem;
+            padding: 15px 25px;
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid transparent;
+        }
+
+        nav a:hover, nav a.active {
+            background: var(--gradient);
+            transform: translateX(10px);
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+            border-color: var(--yellow);
+            color: var(--white);
+        }
+
+        nav a i {
+            font-size: 1.2em;
+            width: 24px;
             text-align: center;
-            margin-bottom: 10px;
+            color: var(--white);
         }
-        nav a:hover {
-            background: #444;
-        }
-        .container {
-            padding: 50px;
-            max-width: 900px;
-            margin: auto;
-            margin-left: 270px;
-        }
-        .hidden {
+
+        .menu-toggle {
             display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--gradient);
+            border: none;
+            color: var(--white);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
         }
-        img {
+
+        .container {
+            padding: 60px 80px;
+            margin-left: 300px;
+            animation: fadeIn 0.6s ease;
+            min-height: 100vh;
             width: 100%;
-            border-radius: 10px;
-            margin-top: 20px;
         }
-        h1 {
-            border-bottom: 2px solid #f5c518;
-            display: inline-block;
-            padding-bottom: 5px;
+
+        h1, h2, h3 {
+            color: var(--white);
+            margin: 2rem 0 1.5rem;
+            position: relative;
+            padding-bottom: 15px;
         }
-        .content {
-            margin-top: 30px;
-            text-align: left;
+
+        h1 { font-size: 2.8rem; }
+        h2 { font-size: 2.2rem; }
+        h3 { font-size: 1.8rem; }
+
+        h1::after, h2::after, h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: var(--gradient);
+            animation: gradientFlow 8s linear infinite;
         }
-        .content img {
-            width: 45%;
-            margin-right: 5%;
-            margin-bottom: 20px;
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            color: var(--white);
         }
-        .content p {
-            font-size: 18px;
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
         }
+
+        .content-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 12px 30px rgba(255,165,0,0.2);
+        }
+
+        .content-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 2rem 0;
+        }
+
+        /* Вертикальные изображения для AR и Игрового модуля */
+        #ar .image-grid,
+        #game .image-grid {
+            grid-template-columns: 1fr;
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        #ar .image-item,
+        #game .image-item {
+            aspect-ratio: 3/4;
+        }
+
+        @media (max-width: 768px) {
+            #ar .image-item,
+            #game .image-item {
+                aspect-ratio: 9/16;
+            }
+        }
+
+        .image-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .image-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .image-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(255,165,0,0.3);
+        }
+
+        .image-item:hover::before {
+            opacity: 0.2;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 2px solid transparent;
+            transition: all 0.5s ease;
+            background: var(--gradient);
+            padding: 2px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 35px;
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 15px 0;
+            gap: 10px;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .button i {
+            color: var(--white);
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            animation: gradientFlow 8s linear infinite;
+        }
+
+        .button:hover {
+            box-shadow: 0 5px 20px rgba(255, 165, 0, 0.4);
+            transform: scale(1.05);
+            color: var(--white);
+        }
+
+        .button:hover::before {
+            opacity: 1;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        p {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
         iframe {
             width: 100%;
             height: 400px;
             border-radius: 10px;
-            margin-top: 20px;
+            margin: 20px 0;
+            border: none;
         }
-        .links {
-            margin-top: 30px;
-            text-align: left;
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+                filter: blur(10px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+                filter: blur(0);
+            }
         }
-        .links a {
-            color: #f5c518;
-            font-size: 16px;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 10px;
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .links a:hover {
-            text-decoration: underline;
+
+        .hidden {
+            display: none;
         }
-        @media screen and (max-width: 768px) {
+
+        @media (max-width: 1200px) {
+            body {
+                flex-direction: column;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
             nav {
-                width: 100px;
+                transform: translateX(-100%);
+                width: 250px;
             }
-            nav a {
-                font-size: 14px;
-                padding: 8px;
+
+            nav.active {
+                transform: translateX(0);
             }
+
             .container {
-                margin-left: 120px;
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 80px;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-item {
+                aspect-ratio: 4/3;
+            }
+
+            .content-card {
+                padding: 20px;
+            }
+
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            border: 3px solid var(--yellow);
+            border-radius: 10px;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
             }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <nav>
-        <a href="#" onclick="showPage('home'); return false;">Главная</a>
-        <a href="#" onclick="showPage('ar'); return false;">AR-приложение</a>
-        <a href="#" onclick="showPage('game'); return false;">Игровой модуль</a>
-        <a href="#" onclick="showPage('vr'); return false;">VR-тренажёр</a>
-        <a href="#" onclick="showPage('oil-history'); return false;">История нефти</a>
-        <a href="#" onclick="showPage('about'); return false;">О проекте</a>
-        <a href="#" onclick="showPage('contact'); return false;">Контакты</a>
+        <a href="#" onclick="showPage('home'); return false;" class="active"><i class="fas fa-home"></i><span>Главная</span></a>
+        <a href="#" onclick="showPage('ar'); return false;"><i class="fas fa-mobile-alt"></i><span>AR-приложение</span></a>
+        <a href="#" onclick="showPage('game'); return false;"><i class="fas fa-gamepad"></i><span>Игровой модуль</span></a>
+        <a href="#" onclick="showPage('vr'); return false;"><i class="fas fa-vr-cardboard"></i><span>VR-тренажёр</span></a>
+        <a href="#" onclick="showPage('oil-history'); return false;"><i class="fas fa-history"></i><span>История нефти</span></a>
+        <a href="#" onclick="showPage('about'); return false;"><i class="fas fa-info-circle"></i><span>О проекте</span></a>
+        <a href="#" onclick="showPage('contact'); return false;"><i class="fas fa-envelope"></i><span>Контакты</span></a>
     </nav>
-    
+
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img src="" alt="Enlarged image">
+    </div>
+
+    <!-- Главная страница -->
     <div id="home" class="container">
-        <h1>Добро пожаловать в виртуальный учебный комплекс!</h1>
-        <p>Наш проект направлен на создание виртуального тренажёра в музее нефти имени Романа Ивановича Кузоваткина, который поможет учащимся изучить нефтегазовую индустрию и определиться с будущей профессией.</p>
-        <img src="muzkuz5.jpg" alt="Главная страница">
-        <div class="content">
+        <div class="content-card">
+            <h1>Добро пожаловать в виртуальный учебный комплекс!</h1>
+            <p>Наш проект направлен на создание виртуального тренажёра в музее нефти имени Романа Ивановича Кузоваткина, который поможет учащимся изучить нефтегазовую индустрию и определиться с будущей профессией.</p>
+            
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="muzkuz5.jpg" alt="Главная страница">
+                </div>
+            </div>
+
             <h2>История музея</h2>
             <p>Музей нефти имени Романа Ивановича Кузоваткина был создан на третьем этаже школы №1 пгт. Пойковский. В музее представлены экспозиции, посвященные истории нефти, истории НГДУ «Правдинскнефть» и быту нефтяников 1970-90-х годов.</p>
-        </div>
-        <img src="muzkuz1.jpg" alt="Фото музея">
-        <div class="links">
-            <a href="https://yandex.ru/maps/?l=stv%2Csta&ll=71.900881%2C60.996021&panorama%5Bdirection%5D=266.124485%2C-5.930811&panorama%5Bfull%5D=true&panorama%5Bpoint%5D=71.900597%2C60.995981&panorama%5Bspan%5D=114.501405%2C60.000000&z=20">Панорама музея им. Р.И. Кузоваткина</a>
+
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="muzkuz1.jpg" alt="Фото музея">
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="https://yandex.ru/maps/?l=stv%2Csta&ll=71.900881%2C60.996021&panorama%5Bdirection%5D=266.124485%2C-5.930811&panorama%5Bfull%5D=true&panorama%5Bpoint%5D=71.900597%2C60.995981&panorama%5Bspan%5D=114.501405%2C60.000000&z=20" class="button">
+                    <i class="fas fa-map-marked-alt"></i>
+                    Панорама музея
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- AR-приложение -->
     <div id="ar" class="container hidden">
-        <h1>AR-приложение</h1>
-        <p>Использование дополненной реальности для изучения экспонатов музея. Посетители могут взаимодействовать с историческими и профориентационными видеороликами в новом формате.</p>
-        <img src="ar.jpg" alt="AR приложение">
-        <img src="ar1.jpg" alt="AR приложение">
-        <div class="links">
-            <a href="https://practicum.yandex.ru/blog/tehnologiya-dopolnennoy-realnosti/">Узнать больше о технологии AR</a>
-            <a href="https://youarenotwhite4343.itch.io/ar-museum">Скачать AR-приложение</a>
+        <div class="content-card">
+            <h1>AR-приложение</h1>
+            <p>Использование дополненной реальности для изучения экспонатов музея. Посетители могут взаимодействовать с историческими и профориентационными видеороликами в новом формате.</p>
+            
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="ar.jpg" alt="AR приложение">
+                </div>
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="ar1.jpg" alt="AR приложение">
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="https://practicum.yandex.ru/blog/tehnologiya-dopolnennoy-realnosti/" class="button">
+                    <i class="fas fa-info-circle"></i>
+                    Узнать больше о технологии AR
+                </a>
+                <a href="https://youarenotwhite4343.itch.io/ar-museum" class="button">
+                    <i class="fas fa-download"></i>
+                    Скачать AR-приложение
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- Игровой модуль -->
     <div id="game" class="container hidden">
-        <h1>Игровой модуль</h1>
-        <p>Пройдите квесты и викторины, зарабатывайте очки, углубляйте знания об истории нефтяной промышленности.</p>
-        <img src="gamemodule.jpg" alt="Наш Telegram-Бот">
-        <img src="gamemodule1.jpg" alt="Наш Telegram-Бот">
-        <img src="gamemodule2.jpg" alt="Наш Telegram-Бот">
-        <div class="links">
-            <a href="https://t.me/NeftcoinGame_bot">Начать игру</a>
+        <div class="content-card">
+            <h1>Игровой модуль</h1>
+            <p>Пройдите квесты и викторины, зарабатывайте очки, углубляйте знания об истории нефтяной промышленности.</p>
+            
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="gamemodule.jpg" alt="Наш Telegram-Бот">
+                </div>
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="gamemodule1.jpg" alt="Наш Telegram-Бот">
+                </div>
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="gamemodule2.jpg" alt="Наш Telegram-Бот">
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="https://t.me/NeftcoinGame_bot" class="button">
+                    <i class="fab fa-telegram"></i>
+                    Начать игру
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- VR-тренажёр -->
     <div id="vr" class="container hidden">
-        <h1>VR-тренажёр</h1>
-        <p>Позволяет погрузиться в виртуальную реальность, исследовать нефтяные месторождения и изучать работу нефтяников на буровых установках.</p>
-        <img src="vrc.png" alt="VR тренажёр">
-        <img src="vrc1.png" alt="VR тренажёр">
-        <iframe src="vrvideo.mp4" title="VR-тренажёр Видео"></iframe>
-        <div class="links">
+        <div class="content-card">
+            <h1>VR-тренажёр</h1>
+            <p>Позволяет погрузиться в виртуальную реальность, исследовать нефтяные месторождения и изучать работу нефтяников на буровых установках.</p>
+            
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="vrc.png" alt="VR тренажёр">
+                </div>
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="vrc1.png" alt="VR тренажёр">
+                </div>
+            </div>
+
+            <iframe src="vrvideo.mp4" title="VR-тренажёр Видео"></iframe>
         </div>
     </div>
 
+    <!-- История нефти -->
     <div id="oil-history" class="container hidden">
-        <h1>История нефти</h1>
-        <p>Нефть известна человечеству с древних времён. Первые упоминания о её использовании относятся к 6500 году до нашей эры. Нефть формируется из остатков древних организмов, подвергшихся давлению и температуре в течение миллионов лет.</p>
-        <p>Правдинское месторождение. 1 декабря 1964 года скважина № Р-51 дала фонтан нефти, что изменило судьбу региона и принесло процветание. Салымское месторождение, где в 1965 году первая скважина также дала нефть, несмотря на трудности первопроходцев. Наконец, Нефтеюганский район, где в 1961 году скважина Р-62 открыла новое время, а в 1977 году был создан 'Юганскнефтегаз', который под руководством Романа Ивановича Кузоваткина разработал 28 месторождений.</p>
-        <img src="istr.jpg" alt="История нефти">
-        <img src="istr1.jpg" alt="История нефти">
-        <div class="links">
-            <a href="https://www.neftegaz-expo.ru/ru/ui/17168/">Узнать больше о месторождениях</a>
-            <a href="https://nonews.co/directory/lists/geography/oil-fields-map">Карта нефтяных месторождений мира</a>
+        <div class="content-card">
+            <h1>История нефти</h1>
+            <p>Нефть известна человечеству с древних времён. Первые упоминания о её использовании относятся к 6500 году до нашей эры. Нефть формируется из остатков древних организмов, подвергшихся давлению и температуре в течение миллионов лет.</p>
+            <p>Правдинское месторождение. 1 декабря 1964 года скважина № Р-51 дала фонтан нефти, что изменило судьбу региона и принесло процветание. Салымское месторождение, где в 1965 году первая скважина также дала нефть, несмотря на трудности первопроходцев. Наконец, Нефтеюганский район, где в 1961 году скважина Р-62 открыла новое время, а в 1977 году был создан 'Юганскнефтегаз', который под руководством Романа Ивановича Кузоваткина разработал 28 месторождений.</p>
+            
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="istr.jpg" alt="История нефти">
+                </div>
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="istr1.jpg" alt="История нефти">
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="https://www.neftegaz-expo.ru/ru/ui/17168/" class="button">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Узнать больше о месторождениях
+                </a>
+                <a href="https://nonews.co/directory/lists/geography/oil-fields-map" class="button">
+                    <i class="fas fa-globe"></i>
+                    Карта нефтяных месторождений мира
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- О проекте -->
     <div id="about" class="container hidden">
-        <h1>О проекте</h1>
-        <p>Проект разработан учениками Пестриковым Кириллом, Морозовым Антоном под руководством наставника Рахманова Александра Валерьевича.</p>
-        <p>Используется отечественная платформа VARWIN для создания интерактивных сценариев и виртуальных сред обучения.</p>
-        <img src="about.jpg" alt="О проекте">
-        <div class="links">
-            <a href="https://vk.com/vrcomplex">Связь с разработчиками</a>
+        <div class="content-card">
+            <h1>О проекте</h1>
+            <p>Проект разработан учениками Пестриковым Кириллом, Морозовым Антоном под руководством наставника Рахманова Александра Валерьевича.</p>
+            <p>Используется отечественная платформа VARWIN для создания интерактивных сценариев и виртуальных сред обучения.</p>
+            
+            <div class="image-grid">
+                <div class="image-item" onclick="openLightbox(this)">
+                    <img src="about.jpg" alt="О проекте">
+                </div>
+            </div>
+
+            <div class="links">
+                <a href="https://vk.com/vrcomplex" class="button">
+                    <i class="fab fa-vk"></i>
+                    Связь с разработчиками
+                </a>
+            </div>
         </div>
     </div>
 
+    <!-- Контакты -->
     <div id="contact" class="container hidden">
-        <h1>Контакты</h1>
-        <p>Свяжитесь с нами по email: virtuallearningcomplex@gmail.com</p>
-        <p>Заполните наш опрос, чтобы помочь нам улучшить учебный комплекс!</p>
-        <div class="links">
-            <a href="https://forms.yandex.ru/u/662511a43e9d086b4aa04017/">Заполнить опрос</a>
+        <div class="content-card">
+            <h1>Контакты</h1>
+            <p>Свяжитесь с нами по email: virtuallearningcomplex@gmail.com</p>
+            <p>Заполните наш опрос, чтобы помочь нам улучшить учебный комплекс!</p>
+            
+            <div class="links">
+                <a href="https://forms.yandex.ru/u/662511a43e9d086b4aa04017/" class="button">
+                    <i class="fas fa-poll"></i>
+                    Заполнить опрос
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
         function showPage(pageId) {
-            // Скрыть все контейнеры
-            const pages = document.querySelectorAll('.container');
-            pages.forEach(page => page.classList.add('hidden'));
-            
-            // Показать выбранную страницу
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('onclick').includes(pageId)) {
+                    link.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.container').forEach(page => {
+                page.classList.add('hidden');
+                page.style.animation = 'none';
+                page.offsetHeight;
+                page.style.animation = null;
+            });
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.remove('hidden');
+            }
+
+            if (window.innerWidth <= 1200) {
+                document.querySelector('nav').classList.remove('active');
             }
         }
+
+        function toggleMenu() {
+            document.querySelector('nav').classList.toggle('active');
+        }
+
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = lightbox.querySelector('img');
+            lightboxImg.src = element.querySelector('img').src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelector('.lightbox img').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            const nav = document.querySelector('nav');
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (window.innerWidth <= 1200 && 
+                !nav.contains(e.target) && 
+                !menuToggle.contains(e.target) &&
+                nav.classList.contains('active')) {
+                nav.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
